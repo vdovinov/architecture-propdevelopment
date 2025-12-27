@@ -1,0 +1,62 @@
+# roles.yaml
+---
+# Роль propdevelopment-security-auditors
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: propdevelopment-security-auditor
+rules:
+- apiGroups: [""]
+  resources: ["pods", "services", "configmaps", "secrets", "namespaces"]
+  verbs: ["get", "list", "watch"]
+- apiGroups: [ "apps" ]
+  resources: [ "deployments", "statefulsets", "daemonsets", "replicasets" ]
+  verbs: [ "get", "list", "watch" ]
+- apiGroups: [""]
+  resources: ["pods/log"]
+  verbs: ["get", "list"]
+---
+# Роль propdevelopment-developer
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: propdevelopment-developer
+  namespace: propdevelopment-development
+rules:
+- apiGroups: [""]
+  resources: ["pods", "services", "configmaps", "persistentvolumeclaims"]
+  verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+- apiGroups: ["apps"]
+  resources: ["deployments", "statefulsets"]
+  verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+- apiGroups: [""]
+  resources: ["pods/log", "pods/exec"]
+  verbs: ["get", "create"]
+---
+# Роль propdevelopment-viewer
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: propdevelopment-viewer
+  namespace: propdevelopment-production
+rules:
+- apiGroups: [""]
+  resources: ["pods", "services", "configmaps"]
+  verbs: ["get", "list", "watch"]
+- apiGroups: ["apps"]
+  resources: ["deployments", "statefulsets"]
+  verbs: ["get", "list", "watch"]
+---
+# Роль для propdevelopment-namespace-admin
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: propdevelopment-namespace-admin
+  namespace: propdevelopment-production
+rules:
+- apiGroups: ["*"]
+  resources: ["*"]
+  verbs: ["*"]
+- apiGroups: [""]
+  resources: ["namespaces"]
+  verbs: ["get"]
