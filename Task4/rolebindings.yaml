@@ -1,0 +1,60 @@
+# rolebindings.yaml
+---
+# Security Auditor имеет доступ ко всем namespace
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: propdevelopment-security-auditor-binding
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: propdevelopment-security-auditor
+subjects:
+- kind: User
+  name: security_auditor
+  apiGroup: rbac.authorization.k8s.io
+---
+# Developer имеет доступ только к development namespace
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: propdevelopment-developer-binding
+  namespace: propdevelopment-development
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: propdevelopment-developer
+subjects:
+- kind: User
+  name: developer
+  apiGroup: rbac.authorization.k8s.io
+---
+# Viewer имеет доступ только на просмотр в production
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: propdevelopment-viewer-binding
+  namespace: propdevelopment-production
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: propdevelopment-viewer
+subjects:
+- kind: User
+  name: viewer
+  apiGroup: rbac.authorization.k8s.io
+---
+# Product Owner имеет полный доступ в своем namespace
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: propdevelopment-namespace-admin-binding
+  namespace: propdevelopment-production
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: namespace-admin
+subjects:
+- kind: User
+  name: namespace_admin
+  apiGroup: rbac.authorization.k8s.io
